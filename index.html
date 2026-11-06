@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Story | Chapter by Chapter</title>
+  <style>
+    :root {
+      --bg: #07080c;
+      --card-bg: rgba(18, 20, 29, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #ff4d6d;
+      --accent-glow: rgba(255, 77, 109, 0.4);
+      --purple-glow: rgba(138, 43, 226, 0.25);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background glowing orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 420px;
+      height: 420px;
+      background: var(--accent-glow);
+      top: 5%;
+      left: 10%;
+    }
+    .orb-2 {
+      width: 480px;
+      height: 480px;
+      background: var(--purple-glow);
+      bottom: 10%;
+      right: 10%;
+      animation-delay: -6s;
+    }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 60px) scale(1.1); }
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Main Container */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 80px 24px 120px 24px;
+    }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .heart-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 77, 109, 0.12);
+      border: 1px solid rgba(255, 77, 109, 0.3);
+      color: var(--accent);
+      margin-bottom: 20px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 var(--accent-glow);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px 6px var(--accent-glow);
+      }
+    }
+
+    .header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #ff758f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Chapter Cards */
+    .chapter-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 77, 109, 0.4);
+    }
+
+    .chapter-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #ff4d6d, #7b2cbf);
+    }
+
+    .chapter-num {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .chapter-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .chapter-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    .tamil-text {
+      font-size: 1.25rem;
+      line-height: 2;
+      color: #fca5a5;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    /* Final Action */
+    .cta-container {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 40px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 25px -5px rgba(255, 77, 109, 0.5);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 16px 32px -5px rgba(255, 77, 109, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="wrapper">
+    <!-- Header -->
+    <header class="header">
+      <div class="heart-badge">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <h1>Chapters of My Heart</h1>
+      <p>Written Honestly, For You</p>
+    </header>
+
+    <!-- Chapter 1 -->
+    <article class="chapter-card">
+      <span class="chapter-num">Chapter 01</span>
+      <h2 class="chapter-title">You Are My Whole World</h2>
+      <p class="chapter-text">
+        In a world full of noise and people, you are the only one who truly matters to me. Having you in my life changed everything. Every dream, every priority, and every thought I carry revolves around you—I only have you, and no one else could ever take your place.
+      </p>
+    </article>
+
+    <!-- Chapter 2 -->
+    <article class="chapter-card">
+      <span class="chapter-num">Chapter 02</span>
+      <h2 class="chapter-title">The Thought of Losing You</h2>
+      <p class="chapter-text">
+        The mere thought of a life without you stops me in my tracks. It hurts deeper than words can express. If things have felt chaotic or difficult, I want to listen, understand, and fix whatever we need to fix. Please don't walk away from us.
+      </p>
+    </article>
+
+    <!-- Chapter 3 -->
+    <article class="chapter-card">
+      <span class="chapter-num">Chapter 03</span>
+      <h2 class="chapter-title">Soulmates & Our Future</h2>
+      <p class="chapter-text">
+        What we share isn't ordinary—we are soulmates. From the moment we connected, I saw my entire future with you. My intention has always been complete and unwavering: to stand by you, walk this road together, and build a marriage that lasts a lifetime.
+      </p>
+    </article>
+
+    <!-- Chapter 4 -->
+    <article class="chapter-card">
+      <span class="chapter-num">Chapter 04</span>
+      <h2 class="chapter-title">என் மனதின் ஆசை</h2>
+      <p class="chapter-text">
+        என் வாழ்க்கையில் நீ மட்டும்தான் எனக்கு எல்லாமே. எந்த சூழ்நிலையிலும் உன்னை இழக்க நான் தயாராக இல்லை. 
+      </p>
+      <p class="tamil-text">
+        "கெஞ்சி கேட்கிறேன்... என்னை விட்டு மட்டும் போயிடாதே."
+      </p>
+    </article>
+
+    <!-- Action Section -->
+    <div class="cta-container">
+      <button class="action-btn" id="glowBtn">Sparkle Our Love ✨</button>
+    </div>
+  </div>
+
+  <script>
+    // Floating Canvas Particles
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    class Particle {
+      constructor(x, y, speedX, speedY, size, alpha) {
+        this.x = x || Math.random() * canvas.width;
+        this.y = y || canvas.height + 10;
+        this.speedX = speedX || (Math.random() - 0.5) * 1.5;
+        this.speedY = speedY || -Math.random() * 1.8 - 0.5;
+        this.size = size || Math.random() * 3.5 + 1.5;
+        this.alpha = alpha || Math.random() * 0.7 + 0.3;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= 0.003;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(255, 117, 143, ${this.alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    let particles = [];
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (particles.length < 60) {
+        particles.push(new Particle());
+      }
+      particles.forEach((p, index) => {
+        p.update();
+        p.draw();
+        if (p.alpha <= 0 || p.y < -10) {
+          particles.splice(index, 1);
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Particle Burst Effect on Click
+    document.getElementById("glowBtn").addEventListener("click", (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 40; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 6 + 2;
+        particles.push(
+          new Particle(
+            centerX,
+            centerY,
+            Math.cos(angle) * velocity,
+            Math.sin(angle) * velocity,
+            Math.random() * 4 + 2,
+            1
+          )
+        );
+      }
+    });
+  </script>
+</body>
+</html>
